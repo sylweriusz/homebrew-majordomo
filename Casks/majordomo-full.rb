@@ -5,10 +5,13 @@
 # `homebrew-majordomo` tap repo, alongside the plain `majordomo` cask built from
 # the public repo (see docs/DISTRIBUTION.md).
 cask "majordomo-full" do
-  version "1.0-beta"
-  sha256 "0e2a0fb6ff887b92a26e224400b119d123b9529414b93b5bba7f210a1e1cbce2"
+  version "1.0.0"
+  sha256 "d1586eec01c89526528d597eec7d85913a29f96b883f81a0838794860afb739c"
 
-  url "https://files.majordomo.pomr.uk/Majordomo-Full-macOS.zip"
+  # Versioned filename on purpose: a stable URL lets Cloudflare serve the PREVIOUS
+  # release from cache under the new checksum, which fails every install until the
+  # edge expires. A fresh path per release cannot be stale.
+  url "https://files.majordomo.pomr.uk/Majordomo-Full-#{version}.zip"
   name "Majordomo Full"
   desc "Local menu-bar Whisper speech-to-text (full edition)"
   homepage "https://majordomo.pomr.uk"
