@@ -6,7 +6,7 @@
 # the public repo (see docs/DISTRIBUTION.md).
 cask "majordomo-full" do
   version "1.0-beta"
-  sha256 "c54a4ad734b06f1f79c2c262f2fd6e80807ace7a09f87ccdea6b3116acb003ff"
+  sha256 "0e2a0fb6ff887b92a26e224400b119d123b9529414b93b5bba7f210a1e1cbce2"
 
   url "https://files.majordomo.pomr.uk/Majordomo-Full-macOS.zip"
   name "Majordomo Full"
