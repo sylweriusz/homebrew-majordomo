@@ -1,15 +1,16 @@
-# Homebrew cask for Majordomo.
+# Homebrew cask for Majordomo Full (built from this repo).
 #
 # `version` and `sha256` are managed by scripts/release-cask.sh — do not edit by
 # hand. This file is the canonical copy; on release it is synced into the public
-# `homebrew-majordomo` tap repo (see docs/DISTRIBUTION.md).
-cask "majordomo" do
-  version "0.1.3"
-  sha256 "60dd1bd37ef12ca44ea2fb45267ab343f4af92d021e19ed04dc8248bb40974e8"
+# `homebrew-majordomo` tap repo, alongside the plain `majordomo` cask built from
+# the public repo (see docs/DISTRIBUTION.md).
+cask "majordomo-full" do
+  version "1.0-beta"
+  sha256 "c54a4ad734b06f1f79c2c262f2fd6e80807ace7a09f87ccdea6b3116acb003ff"
 
-  url "https://majordomo.pomr.uk/Majordomo-macOS.zip"
-  name "Majordomo"
-  desc "Local menu-bar Whisper speech-to-text"
+  url "https://files.majordomo.pomr.uk/Majordomo-Full-macOS.zip"
+  name "Majordomo Full"
+  desc "Local menu-bar Whisper speech-to-text (full edition)"
   homepage "https://majordomo.pomr.uk"
 
   depends_on macos: :sequoia
@@ -17,13 +18,13 @@ cask "majordomo" do
 
   app "Majordomo.app"
 
-  # Both casks ship the same app name and bundle id — they are two editions of one
-  # program, not two programs. Pick one; Homebrew refuses the second.
-  conflicts_with cask: "majordomo-full"
+  # Same app name and bundle id as the plain cask — two editions of one program,
+  # not two programs. Pick one; Homebrew refuses the second.
+  conflicts_with cask: "majordomo"
 
-  # Majordomo is ad-hoc signed, not notarized by Apple. Homebrew quarantines
-  # installed apps by default, which trips Gatekeeper's "could not verify… is
-  # free of malware" block. Strip the quarantine flag so the app opens normally.
+  # Ad-hoc signed, not notarized. Homebrew quarantines installed apps by default,
+  # which trips Gatekeeper's "could not verify… is free of malware" block. Strip
+  # the quarantine flag so the app opens normally.
   postflight do
     system_command "/usr/bin/xattr",
                    args:         ["-dr", "com.apple.quarantine", "#{appdir}/Majordomo.app"],
@@ -32,10 +33,8 @@ cask "majordomo" do
 
   # The cask must not touch launchd. Launch-at-login is owned entirely by the app
   # (a user LaunchAgent it loads/unloads itself, no privileges). Homebrew's
-  # `launchctl:` and `delete:` uninstall directives both escalate to `sudo` —
-  # `launchctl:` probes the system domain, `delete:` runs `sudo rm` — so either
-  # would prompt for a password on every upgrade. Just quit the app; its login
-  # plist (in ~/Library, user-owned) is the app's concern and is cleared by `--zap`.
+  # `launchctl:` and `delete:` uninstall directives both escalate to `sudo`, so
+  # either would prompt for a password on every upgrade. Just quit the app.
   uninstall quit: "pl.wild-matrix.majordomo"
 
   zap trash: [
