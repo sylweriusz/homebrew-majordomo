@@ -5,8 +5,8 @@
 # `homebrew-majordomo` tap repo, alongside the plain `majordomo` cask built from
 # the public repo (see docs/DISTRIBUTION.md).
 cask "majordomo-full" do
-  version "1.0.107"
-  sha256 "8a2d082dce60d97f7b64fe7dcc93d1cc0be698ec76e7d2f6d502c3fcaabc86ec"
+  version "1.0.108"
+  sha256 "c0d15fc81e3ab8fec2111eb00ded7c9d1e597726cb9c26efea59b2511570d441"
 
   # Versioned filename on purpose: a stable URL lets Cloudflare serve the PREVIOUS
   # release from cache under the new checksum, which fails every install until the
@@ -14,24 +14,25 @@ cask "majordomo-full" do
   url "https://files.majordomo.pomr.uk/Majordomo-Full-#{version}.zip"
   name "Majordomo Full"
   desc "Local menu-bar Whisper speech-to-text (full edition)"
-  homepage "https://majordomo.pomr.uk"
-
-  depends_on macos: :sequoia
-  depends_on arch: :arm64
-
-  app "Majordomo.app"
+  homepage "https://majordomo.pomr.uk/"
 
   # Same app name and bundle id as the plain cask — two editions of one program,
   # not two programs. Pick one; Homebrew refuses the second.
   conflicts_with cask: "majordomo"
+  depends_on arch: :arm64
+  depends_on macos: :sequoia
+
+  app "Majordomo.app"
 
   # Ad-hoc signed, not notarized. Homebrew quarantines installed apps by default,
   # which trips Gatekeeper's "could not verify… is free of malware" block. Strip
   # the quarantine flag so the app opens normally.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args:         ["-dr", "com.apple.quarantine", "#{appdir}/Majordomo.app"],
-                   must_succeed: false
+  # Homebrew 7: declarative steps, run in a sandbox — the app bundle must be named writable.
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:           ["-dr", "com.apple.quarantine", "{{appdir}}/Majordomo.app"],
+        must_succeed:   false,
+        writable_paths: ["{{appdir}}/Majordomo.app"]
   end
 
   # The cask must not touch launchd. Launch-at-login is owned entirely by the app
@@ -42,8 +43,8 @@ cask "majordomo-full" do
 
   zap trash: [
     "~/Library/Application Support/pl.wild-matrix.majordomo",
-    "~/Library/Preferences/pl.wild-matrix.majordomo.plist",
     "~/Library/LaunchAgents/pl.wild-matrix.majordomo.plist",
+    "~/Library/Preferences/pl.wild-matrix.majordomo.plist",
   ]
 
   caveats <<~EOS
