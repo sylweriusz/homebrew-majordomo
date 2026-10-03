@@ -5,8 +5,8 @@
 # `homebrew-majordomo` tap repo, alongside the plain `majordomo` cask built from
 # the public repo (see docs/DISTRIBUTION.md).
 cask "majordomo-full" do
-  version "1.0.119"
-  sha256 "93fd7b5fc12ec4353839f8bb7056040906817f64b4696905c7c7ab8fc06a120f"
+  version "1.0.120"
+  sha256 "d7429597419bd6d7c2ace75040cb0ec39e6a972e0f56031a081770cc75a31f71"
 
   # Versioned filename on purpose: a stable URL lets Cloudflare serve the PREVIOUS
   # release from cache under the new checksum, which fails every install until the
